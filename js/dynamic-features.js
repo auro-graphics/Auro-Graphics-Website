@@ -60,23 +60,17 @@
               // Show sending notification
               this.showNotification('Sending your message...', 'info');
               
-              // Submit to FormSubmit
               const response = await fetch(contactForm.action, {
-                  method: 'POST',
-                  body: formData
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: formData
               });
-
-              // Check if FormSubmit redirected (success) or returned error
-              if (response.redirected || response.ok) {
-                  this.showNotification('Thank you! Your message has been sent successfully.', 'success');
-                  contactForm.reset();
-                  
-                  // Stay on page instead of redirecting
-                  setTimeout(() => {
-                      this.showNotification('We will get back to you soon!', 'success');
-                  }, 1000);
+              
+              if (response.ok) {
+                this.showNotification('Thank you! Your message has been sent successfully.', 'success');
+                contactForm.reset();
               } else {
-                  throw new Error('Failed to send message');
+                this.showNotification('Failed to send message. Try again later.', 'error');
               }
           }  catch (error) {
             console.warn('FormSubmit redirect blocked (normal for cross-origin)', error);
