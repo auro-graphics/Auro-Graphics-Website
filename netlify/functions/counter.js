@@ -9,21 +9,28 @@ function readVisitorsData() {
   try {
     if (fs.existsSync(visitorsFile)) {
       const data = fs.readFileSync(visitorsFile, 'utf8');
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      console.log('Read data:', parsed); // Debug log
+      return parsed;
     }
   } catch (error) {
     console.error('Error reading visitors data:', error);
   }
-  return { 
+  
+  // Default data if file doesn't exist
+  const defaultData = { 
     totalVisitors: 0, 
     todayVisitors: 0, 
     lastReset: new Date().toISOString() 
   };
+  console.log('Using default data:', defaultData); // Debug log
+  return defaultData;
 }
 
 // Function to write visitor data
 function writeVisitorsData(data) {
   try {
+    console.log('Writing data:', data); // Debug log
     fs.writeFileSync(visitorsFile, JSON.stringify(data, null, 2));
     return true;
   } catch (error) {
@@ -38,12 +45,17 @@ function shouldResetDaily(lastReset) {
   const currentDate = new Date();
   
   // Reset if it's a new day
-  return lastResetDate.getDate() !== currentDate.getDate() ||
-         lastResetDate.getMonth() !== currentDate.getMonth() ||
-         lastResetDate.getFullYear() !== currentDate.getFullYear();
+  const shouldReset = lastResetDate.getDate() !== currentDate.getDate() ||
+                     lastResetDate.getMonth() !== currentDate.getMonth() ||
+                     lastResetDate.getFullYear() !== currentDate.getFullYear();
+  
+  console.log('Should reset daily:', shouldReset); // Debug log
+  return shouldReset;
 }
 
 exports.handler = async function (event) {
+  console.log('Counter function called'); // Debug log
+  
   // Handle CORS
   const headers = {
     'Content-Type': 'application/json',
@@ -67,16 +79,23 @@ exports.handler = async function (event) {
     
     // Check if we should reset today's count (new day)
     if (shouldResetDaily(visitorsData.lastReset)) {
-      visitorsData.todayVisitors = 0; // Reset today's count
+      console.log('Resetting today count'); // Debug log
+      visitorsData.todayVisitors = 0;
       visitorsData.lastReset = new Date().toISOString();
     }
     
     // Increment both counters on every visit
-    visitorsData.totalVisitors++; // Total visitors (never resets)
-    visitorsData.todayVisitors++; // Today's visitors (resets daily)
+    visitorsData.totalVisitors = (visitorsData.totalVisitors || 0) + 1;
+    visitorsData.todayVisitors = (visitorsData.todayVisitors || 0) + 1;
+    
+    console.log('Updated counts - Total:', visitorsData.totalVisitors, 'Today:', visitorsData.todayVisitors); // Debug log
     
     // Write updated data
-    writeVisitorsData(visitorsData);
+    const writeSuccess = writeVisitorsData(visitorsData);
+    
+    if (!writeSuccess) {
+      throw new Error('Failed to write data');
+    }
 
     return {
       statusCode: 200,

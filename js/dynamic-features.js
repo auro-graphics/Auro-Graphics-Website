@@ -306,3 +306,48 @@ async function loadAndAnimateStats() {
 
 // On DOM ready, setup observer
 document.addEventListener('DOMContentLoaded', setupStatsCardAnimation);
+
+// Simple function to load and display visitor counts
+async function loadVisitorCounts() {
+  try {
+    console.log('Loading visitor counts...'); // Debug log
+    
+    const response = await fetch('/.netlify/functions/counter');
+    console.log('Response status:', response.status); // Debug log
+    
+    const data = await response.json();
+    console.log('Response data:', data); // Debug log
+    
+    if (data.success) {
+      // Update the HTML elements
+      const totalElement = document.getElementById('totalVisitors');
+      const todayElement = document.getElementById('todayVisitors');
+      
+      if (totalElement && todayElement) {
+        totalElement.textContent = data.totalVisitors;
+        todayElement.textContent = data.todayVisitors;
+        console.log('Updated HTML - Total:', data.totalVisitors, 'Today:', data.todayVisitors); // Debug log
+      } else {
+        console.error('HTML elements not found');
+      }
+    } else {
+      console.error('Failed to load visitor counts:', data.error);
+    }
+  } catch (error) {
+    console.error('Error loading visitor counts:', error);
+  }
+}
+
+// Load counts when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, calling loadVisitorCounts'); // Debug log
+  loadVisitorCounts();
+});
+
+// Also load counts when page becomes visible (in case of caching)
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    console.log('Page became visible, reloading counts'); // Debug log
+    loadVisitorCounts();
+  }
+});
