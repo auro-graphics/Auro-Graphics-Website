@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURO Graphics | Crafting Visual Stories</title>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Standard favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon/favicon-96x96.png" sizes="96x96">
+
+    <link href="https://fonts.googleapis.com/css2?family=Afacad&family=Inter:wght@300;400;700&family=Montserrat:wght@300;400;700&family=Speedy&family=Source+Code+Pro&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c13f198314f44ceca9c01b3f33a9175b"}'></script><!-- End Cloudflare Web Analytics -->
+    <style>
+
+      body{
+        cursor: url('assets/images/cursor/Cursor.png'), auto;
+
+      }
+        @font-face {
+            font-family: 'Speedy';
+            src: url('assets/fonts/Speedy.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+/* Pricing Section Styles */
+.pricing-section {
+  background-color: var(--background-color);
+  color: #fff;
+  padding: 60px 5%;
+}
+
+.pricing-section h2.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: var(--off-white, #fff);
+}
+
+.pricing-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.pricing-block {
+  background: #0a0a0a;
+  border-radius: 14px;
+  box-shadow: 0 0 0 2px var(--accent-pink);
+  overflow: hidden;
+}
+
+.category-title {
+  font-size: 1.6rem;
+  color: var(--accent-pink);
+  padding: 12px 18px;
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.subcategory-title {
+  margin: 15px 0 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--accent-pink);
+  text-align: center;
+}
+
+.styled-pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #000;
+  color: #fff;
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px #ffffff;
+}
+
+.styled-pricing-table thead th {
+  background: var(--accent-pink);
+  color: white;
+  font-size: 1rem;
+  padding: 14px 16px;
+  text-align: center;
+  border: 1px solid #fff;
+  vertical-align: middle;
+}
+
+.styled-pricing-table tbody td {
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  border: 1px solid #fff;
+  background: rgba(255, 255, 255, 0.02);
+  word-break: break-word;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.styled-pricing-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  .styled-pricing-table thead th,
+  .styled-pricing-table tbody td {
+    font-size: 0.75rem;
+    padding: 10px;
+  }
+
+  .category-title {
+    font-size: 1.2rem;
+    padding: 10px 14px;
+  }
+
+  .subcategory-title {
+    font-size: 0.8rem;
+  }
+
+  .pricing-section h2.section-title {
+    font-size: 2.1rem;
+  }
+}
+@media (max-width: 480px) {
+  .styled-pricing-table thead th,
+  .styled-pricing-table tbody td {
+    font-size: 0.75rem;
+    padding: 8px;
+  }
+
+  .category-title {
+    font-size: 1.0rem;
+    padding: 8px 12px;
+  }
+
+  .subcategory-title {
+    font-size: 0.75rem;
+  }
+
+  .pricing-section h2.section-title {
+    font-size: 1.7rem;
+  }
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#home" class="logo">
+                <img src="assets\images\Logo.png" alt="AURO Logo" class="logo-bot">
+                <span class="logo-auro">AURO</span>
+                <span class="logo-graphics">Graph<span class="logo-i">i</span>cs</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#portfolio" class="nav-link">Portfolio</a></li>
+                <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
+                <li class="nav-item"><a href="#pricing" class="nav-link">Pricing</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+    <!-- Home Progress Bar -->
+    <div class="home-progress-bar-container">
+        <div class="home-progress-bar-bg">
+            <div class="home-progress-bar-fill"></div>
+            <img src="assets/bots/Auro Bot Pencil.png" alt="Pencil Bot" class="progress-bot" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/565/565547.png'">
+        </div>
+    </div>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="home-section">
+            <img src="assets/bots/left Flying Cross Bot.png" alt="Flying Auro Bot Left" class="flying-bot flying-bot-left">
+            <img src="assets/bots/right Flying Cross Bot.png" alt="Flying Auro Bot Right" class="flying-bot flying-bot-right">
+            <div class="home-content">
+                <h1 class="typewriter-heading"></h1>
+                <p class="home-subtext">Bringing your brand's vision to life with stunning visuals and creative design.</p>
+                <a href="#portfolio" class="btn">Explore Portfolio</a>
+            </div>
+            <div class="slider">
+                <button class="slider-btn prev-btn" aria-label="Previous slide">
+                  <img src="assets/arrows svg/left arrow.svg" alt="Left Arrow" style="width:24px;height:24px;filter:invert(1);">
+                </button>
+                <div class="slides">
+                    <div class="slide active"><img src="assets\slide img\1Post.png" alt="Slide 1"></div>
+                    <div class="slide"><img src="assets\slide img\2Post.png" alt="Slide 2"></div>
+                    <div class="slide"><img src="assets\slide img\3Post.png" alt="Slide 3"></div>
+                    <div class="slide"><img src="assets\slide img\4Post.png" alt="Slide 4"></div>
+                    <div class="slide"><img src="assets\slide img\5Post.png" alt="Slide 5"></div>
+                    <div class="slide"><img src="assets\slide img\6Post.png" alt="Slide 6"></div>
+                    <div class="slide"><img src="assets\slide img\7Post.png" alt="Slide 7"></div>
+                    <div class="slide"><img src="assets\slide img\8Post.png" alt="Slide 8"></div>
+                    <div class="slide"><img src="assets\slide img\9Post.png" alt="Slide 9"></div>
+                </div>
+                <button class="slider-btn next-btn" aria-label="Next slide">
+                  <img src="assets/arrows svg/right arrow.svg" alt="Right Arrow" style="width:24px;height:24px;filter:invert(1);">
+                </button>
+                <div class="slider-dots"></div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="portfolio-section">
+            <h2>Our Work</h2>
+            <div class="filters">
+                <div class="outer-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="digital-invitations">Digital Invitation Cards</button>
+                    <button class="filter-btn" data-filter="business-branding">Business Branding</button>
+                    <button class="filter-btn" data-filter="promotional-graphics">Promotional Graphics</button>
+                </div>
+                <div class="inner-filters" id="digital-invitations-subcats" style="display:none;">
+                    <button class="inner-filter-btn" data-filter="wedding"><i class="fa-solid fa-ring"></i> Wedding Invitations</button>
+                    <button class="inner-filter-btn" data-filter="engagement"><i class="fa-solid fa-heart"></i> Engagement Invitations</button>
+                    <button class="inner-filter-btn" data-filter="save-the-date"><i class="fa-solid fa-calendar-days"></i> Save-the-Date Cards</button>
+                    <button class="inner-filter-btn" data-filter="birthday"><i class="fa-solid fa-cake-candles"></i> Birthday & Anniversary Cards</button>
+                    <button class="inner-filter-btn" data-filter="community"><i class="fa-solid fa-users"></i> Community Gathering</button>
+                    <button class="inner-filter-btn" data-filter="grand-opening"><i class="fa-solid fa-store"></i> Grand Opening</button>
+                </div>
+                <div class="inner-filters" id="business-branding-subcats" style="display:none;">
+                    <button class="inner-filter-btn" data-filter="logo"><i class="fa-solid fa-lightbulb"></i> Logo Design</button>
+                    <button class="inner-filter-btn" data-filter="business-cards"><i class="fa-solid fa-address-card"></i> Business Cards</button>
+                    <button class="inner-filter-btn" data-filter="social-media"><i class="fa-solid fa-share-nodes"></i> Social Media Graphics</button>
+                    <button class="inner-filter-btn" data-filter="packaging"><i class="fa-solid fa-box"></i> Packaging Design</button>
+                </div>
+                <div class="inner-filters" id="promotional-graphics-subcats" style="display:none;">
+                    <button class="inner-filter-btn" data-filter="posters"><i class="fa-solid fa-file-image"></i> Posters, Flyers & Banners</button>
+                    <button class="inner-filter-btn" data-filter="social-creatives"><i class="fa-brands fa-instagram"></i> Social Media Creatives</button>
+                    <button class="inner-filter-btn" data-filter="reels"><i class="fa-solid fa-clapperboard"></i> Reels & Ad Graphics</button>
+                </div>
+            </div>
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- Portfolio items will be dynamically loaded -->
+            </div>
+        </section>
+        
+        <!-- Fullscreen Popup -->
+          <div id="fullscreen-popup" class="popup-container">
+              <span class="popup-close" onclick="document.getElementById('fullscreen-popup').classList.remove('show'); document.body.style.overflow='auto';">
+                &times;
+              </span>
+              <div class="popup-box">
+                <div class="popup-left">
+                  <img class="popup-content" id="popup-img" />
+                </div>
+                <div class="popup-right">
+                  <div id="popup-caption" class="popup-caption">
+                    <div class="popup-title-box">
+                      <h3 id="popup-title">Title Here</h3>
+                    </div>
+                    <p id="popup-subtitle" class="subtitle">Subtitle</p>
+                    <h4 class="desc-heading">Description</h4>
+                    <div id="popup-description" class="description">
+                      <div class="description-text" id="description-text"></div>
+                      <button id="toggle-desc" class="btn small-btn">Read more</button>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+    
+        <!-- Services Section -->
+       <section id="services" class="services-section">
+         <h2 class="section-title">What We Offer</h2>
+
+          <div class="service-categories">
+            <button data-service-category="digital-invitations" class="active">Digital Invitation Cards</button>
+            <button data-service-category="business-branding">Business Branding</button>
+            <button data-service-category="promotional-graphics">Promotional Graphics</button>
+          </div>
+
+          <div class="service-items-container">
+            <!-- JavaScript will inject services here -->
+          </div>
+        </section>
+
+       <!-- Pricing Section -->
+       <section id="pricing" class="pricing-section">
+        <h2 class="section-title">Our Pricing</h2>
+        <div class="pricing-grid">
+      
+          <!-- 🟣 Digital Invitation Cards -->
+          <div class="pricing-block">
+            <h3 class="category-title">Digital Invitation Cards</h3>
+            <table class="styled-pricing-table">
+              <thead>
+                <tr><th>Service</th><th>Sub-Category / Event</th><th>Description</th><th>Price (INR)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td rowspan="9">Wedding Invitation</td><td>Main Card</td><td>Elegant & Personalized Design</td><td>₹300</td></tr>
+                <tr><td>Chandla / Mandap Vidhi</td><td>Traditional Gujarati Pre-Wedding Invite</td><td>₹150</td></tr>
+                <tr><td>Haldi Ceremony</td><td>Yellow Theme with Fun Elements</td><td>₹150</td></tr>
+                <tr><td>Sangeet / Sandhya Night</td><td>Musical or Bollywood Theme</td><td>₹200</td></tr>
+                <tr><td>Mehndi Function</td><td>Floral Green Theme with Bride Graphics</td><td>₹150</td></tr>
+                <tr><td>Ganesh Sthapna / Gruh Shanti</td><td>Spiritual-themed Invite</td><td>₹150</td></tr>
+                <tr><td>Reception</td><td>Formal Invite with Couple Photo</td><td>₹200</td></tr>
+                <tr><td>Multi-Language Card</td><td>Gujarati / Hindi / English Version</td><td>₹300</td></tr>
+                <tr><td>Wedding Video Card (Animated)</td><td>Motion Graphic / Reel-style Invite</td><td>₹400</td></tr>
+      
+                <tr><td rowspan="3">Engagement Invitation</td><td>Ring Ceremony</td><td>Classy & Romantic Invite</td><td>₹250</td></tr>
+                <tr><td>Engagement Video Invite</td><td>Animated Photo-Video Invite</td><td>₹400</td></tr>
+                <tr><td>Family Function Invite</td><td>Casual Cultural Get-together</td><td>₹200</td></tr>
+      
+                <tr><td rowspan="2">Birthday / Anniversary</td><td>Kids Theme</td><td>Cartoon / Superhero Invite</td><td>₹200</td></tr>
+                <tr><td>Adults / Seniors</td><td>Floral / Elegant Invite</td><td>₹200</td></tr>
+      
+                <tr><td>Save-the-Date</td><td>Wedding / Engagement</td><td>Minimalist or Script Style Teaser</td><td>₹150</td></tr>
+      
+                <tr><td rowspan="3">Community / Opening</td><td>Shop / Business Launch</td><td>Grand Event Invite</td><td>₹200</td></tr>
+                <tr><td>Temple Inauguration</td><td>Devotional Invite</td><td>₹200</td></tr>
+                <tr><td>Housing Society / Samaj Event</td><td>General Public Invite</td><td>₹180</td></tr>
+              </tbody>
+            </table>
+          </div>
+      
+          <!-- 🔵 Business Branding -->
+          <div class="pricing-block">
+            <h3 class="category-title">Business Branding</h3>
+            <table class="styled-pricing-table">
+              <thead>
+                <tr><th>Service</th><th>Sub-Category / Event</th><th>Description</th><th>Price (INR)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Logo Design</td><td>Brand Identity</td><td>3 Concepts + 3 Revisions</td><td>₹600</td></tr>
+                <tr><td>Business Card</td><td>Front + Back</td><td>Double-sided / Print-Ready Design</td><td>₹250</td></tr>
+                <tr><td>Social Media Graphics</td><td>Post + Story</td><td>Static Branded Design</td><td>₹200</td></tr>
+                <tr><td>Packaging Design</td><td>Box / Wrapper</td><td>Flat or 3D Mockup</td><td>₹400</td></tr>
+                <tr><td rowspan="4">Bag Design</td><td>1 Color</td><td>Simple Graphic/Text</td><td>₹100</td></tr>
+                <tr><td>2 Colors</td><td>Highlight Color Added</td><td>₹150</td></tr>
+                <tr><td>3 Colors</td><td>Full Composition-Based Design</td><td>₹200</td></tr>
+                <tr><td>4 Colors</td><td>Best Quality, Full Coverage</td><td>₹250</td></tr>
+              </tbody>
+            </table>
+          </div>
+      
+          <!-- 🟡 Promotional Graphics -->
+          <div class="pricing-block">
+            <h3 class="category-title">Promotional Graphics</h3>
+            <table class="styled-pricing-table">
+              <thead>
+                <tr><th>Service</th><th>Sub-Category</th><th>Description</th><th>Price (INR)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td rowspan="2">YouTube Design</td><td>Thumbnail</td><td>Bold & Eye-catching Cover Image</td><td>₹250</td></tr>
+                <tr><td>Channel Art</td><td>Banner + Profile Visuals</td><td>₹300</td></tr>
+                <tr><td rowspan="3">Instagram Design</td><td>Static Post</td><td>Promotional or Festival Content</td><td>₹180</td></tr>
+                <tr><td>Story Design</td><td>Story Highlight or Announcement</td><td>₹180</td></tr>
+                <tr><td>Reel Cover</td><td>Scroll-Stopping Cover Art</td><td>₹200</td></tr>
+                <tr><td>Poster / Flyer</td><td>Events / Ads</td><td>Print or Digital Flyer</td><td>₹200</td></tr>
+                <tr><td>WhatsApp Poster</td><td>Deals / Offers</td><td>Mobile Size Poster</td><td>₹180</td></tr>
+              </tbody>
+            </table>
+          </div>
+      
+          <!-- 🟢 Design Packages -->
+          <div class="pricing-block">
+            <h3 class="category-title">Design Packages</h3>
+            <table class="styled-pricing-table">
+              <thead>
+                <tr><th>Service</th><th>Package</th><th>Includes</th><th>Price (INR)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td rowspan="3">Logo Design</td><td>Silver</td><td>1 Logo + 1 Revision</td><td>₹500</td></tr>
+                <tr><td>Gold</td><td>1 Logo + 3 Revisions</td><td>₹700</td></tr>
+                <tr><td>Platinum</td><td>3 Concepts + Unlimited Revisions</td><td>₹1000</td></tr>
+      
+                <tr><td rowspan="3">Wedding Invitation</td><td>Silver</td><td>Main Invite + Save-the-Date</td><td>₹400</td></tr>
+                <tr><td>Gold</td><td>Silver + Story Creative</td><td>₹600</td></tr>
+                <tr><td>Platinum</td><td>All Ritual Invites + Animation</td><td>₹1000</td></tr>
+      
+                <tr><td rowspan="3">Social Media Graphics</td><td>Silver</td><td>5 Posts / Month</td><td>₹800</td></tr>
+                <tr><td>Gold</td><td>10 Posts + 2 Reels</td><td>₹1500</td></tr>
+                <tr><td>Platinum</td><td>20 Posts + 4 Reels</td><td>₹2500</td></tr>
+              </tbody>
+            </table>
+          </div>
+      
+        </div>
+      </section>
+
+        
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <h2>Get In Touch</h2>
+            <div class="contact-container">
+              <form class="contact-form" action="https://formsubmit.co/auroadvertsadvertising@gmail.com" method="POST">
+                  <!-- Disable CAPTCHA -->
+                  <input type="hidden" name="_captcha" value="false">
+                
+                  <!-- Custom subject line -->
+                  <input type="hidden" name="_subject" value="New message from AURO Graphics website">
+                
+                  <!-- Optional: Prevent redirect (stay on page) -->
+                  <input type="hidden" name="_redirect" value="https://aurographics.netlify.app/"> <!-- Replace with your site link -->
+                
+                  <!-- Name field -->
+                  <input type="text" name="name" placeholder="Your Name" required>
+                
+                  <!-- Phone or Email input as text -->
+                  <input type="text" name="contact" placeholder="Your Email or Phone Number" required>
+                
+                  <!-- Message -->
+                  <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+                
+                  <!-- Submit button -->
+                  <button type="submit" class="btn">Send Message</button>
+                </form>
+
+
+
+                <div class="contact-details">
+                    <h3>Contact Information</h3>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:auroadvertsadvertising@gmail.com">auroadvertsadvertising@gmail.com</a></p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:+919925522123">+91 99255 22123</a>  <span> | </span> <a href="tel:+919904301814">+91 99043 01814</a></p>
+                    <div class="social-links">
+                            <a href="https://www.instagram.com/auro_graphics.in/" target="_blank" class="social-link-item">
+                                <i class="fab fa-instagram"></i>
+                                <span>@auro_graphics.in</span>
+                            </a>
+                            <a href="https://wa.me/919925522123" target="_blank" class="social-link-item">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>Chat with us</span>
+                            </a>
+                        </div>
+                </div>
+            </div>
+             <img src="assets\bots\Flying Auro Bot.png" class="contact-bot" alt="Auro Bot">
+        </section>
+    </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 AURO Graphics. All Rights Reserved.</p>
+        </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrollPercent = (scrollTop / scrollHeight) * 100;
+
+    const progressBar = document.querySelector('.home-progress-bar-fill');
+    const progressBot = document.querySelector('.progress-bot');
+
+    if (progressBar) progressBar.style.width = scrollPercent + '%';
+    if (progressBot) progressBot.style.left = scrollPercent + '%';
+  });
+</script>
+
+
+</body>
+</html>
