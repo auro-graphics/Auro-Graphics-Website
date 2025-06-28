@@ -366,7 +366,6 @@ section h2::after {
 
 /* 🏠 HOME SECTION */
 .home-section {
-    background: linear-gradient(135deg, var(--accent-pink) 0%, var(--primary-purple) 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -376,39 +375,15 @@ section h2::after {
     border-radius: 0;
     box-shadow: none;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
     padding: 120px 5% 40px;
 }
 
-.home-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-
-@keyframes slideDown {
-    0% {
-        transform: translate(-50%, -100%);
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, 0);
-        opacity: 1;
-    }
-}
 
 /* Home Content Animation */
 .home-content {
     position: relative;
-    z-index: 2;
+    z-index: 3; /* highest */
     text-align: center;
     max-width: 1000px;
     width: 90%;
@@ -440,6 +415,113 @@ section h2::after {
         opacity: 1;
     }
 }
+
+
+/* Container behind home content */
+
+.blob-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Shared Blob Style */
+.blob {
+  position: absolute;
+  width: 1100px;
+  height: 1100px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 1;
+  mix-blend-mode: lighten;
+  animation: blob-float 10s ease-in-out infinite alternate;
+  transition: transform 1s ease-in-out;
+}
+
+/* Accent Pink */
+.ball1 {
+  background: var(--accent-pink);
+  animation-name: movePink;
+  z-index: 2;
+}
+
+/* Primary Purple */
+.ball2 {
+  background: var(--primary-purple);
+  animation-name: movePurple;
+  z-index: 2;
+}
+
+/* Gooey bounce simulation */
+@keyframes movePink {
+  0%   { transform: translate(-20%, -10%) scale(1); }
+  50%  { transform: translate(30%, 20%) scale(1.2); }
+  100% { transform: translate(-10%, -5%) scale(1); }
+}
+
+@keyframes movePurple {
+  0%   { transform: translate(10%, 30%) scale(1.1); }
+  50%  { transform: translate(-25%, -15%) scale(1.3); }
+  100% { transform: translate(15%, 10%) scale(1); }
+}
+
+/* =============================
+   📱 Responsive Adjustments
+   ============================= */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .blob {
+    width: 1000px;
+    height: 1000px;
+    filter: blur(70px);
+  }
+
+  @keyframes movePink {
+    0%   { transform: translate(-15%, -5%) scale(1); }
+    50%  { transform: translate(20%, 10%) scale(1.1); }
+    100% { transform: translate(-10%, 0%) scale(1); }
+  }
+
+  @keyframes movePurple {
+    0%   { transform: translate(5%, 20%) scale(1); }
+    50%  { transform: translate(-20%, -10%) scale(1.1); }
+    100% { transform: translate(10%, 5%) scale(1); }
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .blob {
+    width: 700px;
+    height: 700px;
+
+    filter: blur(50px);
+  }
+
+  @keyframes movePink {
+    0%   { transform: translate(-20%, -10%) scale(1); }
+    50%  { transform: translate(30%, 10%) scale(1.05); }
+    100% { transform: translate(-10%, 0%) scale(1); }
+  }
+
+  @keyframes movePurple {
+    0%   { transform: translate(10%, 20%) scale(1); }
+    50%  { transform: translate(-20%, -10%) scale(1.05); }
+    100% { transform: translate(10%, 10%) scale(1); }
+  }
+}
+
+
+
 
 .typewriter-heading {
     font-size: 3.5rem;
@@ -2354,7 +2436,7 @@ select:disabled, option:disabled {
     stroke-linecap: round;
   }
   .stat-count {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 800;
     color: #ee3480;
     margin-bottom: 0.3rem;
@@ -2407,7 +2489,7 @@ select:disabled, option:disabled {
     }
   
     .stat-count {
-      font-size: 1rem;
+      font-size: 1.5rem;
     }
   
     .stat-label {
@@ -2457,7 +2539,7 @@ select:disabled, option:disabled {
     }
   
     .stat-count {
-      font-size: 0.8rem;
+      font-size: 1rem;
     }
   
     .stat-label {

@@ -258,15 +258,17 @@ function animateCount(element, target, duration = 1200) {
   function animateStep(timestamp) {
     if (!startTime) startTime = timestamp;
     const progress = Math.min((timestamp - startTime) / duration, 1);
-    element.textContent = Math.floor(progress * (target - start) + start);
+    const current = Math.floor(progress * (target - start) + start);
+    element.textContent = '+' + current;
     if (progress < 1) {
       requestAnimationFrame(animateStep);
     } else {
-      element.textContent = target;
+      element.textContent = '+' + target;
     }
   }
   requestAnimationFrame(animateStep);
 }
+
 
 // Intersection Observer to trigger animation on scroll
 function setupStatsCardAnimation() {
