@@ -786,29 +786,19 @@
     <section id="contact" class="contact-section">
       <h2>Get In Touch</h2>
       <div class="contact-container">
-        <form class="contact-form" action="https://formsubmit.co/auroadvertsadvertising@gmail.com" method="POST">
+        <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/auroadvertsadvertising@gmail.com" method="POST">
           <!-- Disable CAPTCHA -->
           <input type="hidden" name="_captcha" value="false">
-
-          <!-- Custom subject line -->
+          <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_subject" value="New message from AURO Graphics website">
-
-          <!-- Optional: Prevent redirect (stay on page) -->
-          <input type="hidden" name="_redirect" value="https://aurographics.netlify.app/">
-          <!-- Replace with your site link -->
-
-          <!-- Name field -->
+        
           <input type="text" name="name" placeholder="Your Name" required>
-
-          <!-- Phone or Email input as text -->
           <input type="text" name="contact" placeholder="Your Email or Phone Number" required>
-
-          <!-- Message -->
           <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
-
-          <!-- Submit button -->
+        
           <button type="submit" class="btn">Send Message</button>
         </form>
+        
 
 
 
