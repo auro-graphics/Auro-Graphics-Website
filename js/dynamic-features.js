@@ -51,9 +51,9 @@ class DynamicFeatures {
 
       // Validation: Email format
       const email = document.getElementById('emailField').value.trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(email)) {
-        this.showNotification('Please enter a valid email address.', 'error');
+        this.showNotification('Please enter a valid email address (e.g. user@example.com).', 'error');
         return;
       }
       // Validation: Phone (optional but must be digits if entered)
@@ -82,8 +82,11 @@ class DynamicFeatures {
 
         if (response.ok) {
           this.showNotification('Thank you! Your message has been sent successfully.', 'success');
-          this.showNotification('We will get back you soon!', 'success');
           contactForm.reset();
+
+          setTimeout(() => {
+            this.showNotification('We will get back to you soon!', 'success');
+          }, 1500);
         } else {
           this.showNotification('Failed to send message. Try again later.', 'error');
         }
