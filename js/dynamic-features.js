@@ -58,11 +58,11 @@ class DynamicFeatures {
       }
       // Validation: Phone (optional but must be digits if entered)
       const phone = document.getElementById('phoneField').value.trim();
-      if (phone !== '' && !/^\d{10}$/.test(phone)) {
+      if (phone == '' && !/^\d{10}$/.test(phone)) {
         this.showNotification('Please enter a valid 10-digit phone number.', 'error');
         return;
       }
-      
+
       // Show loading state
       submitBtn.textContent = 'Sending...';
       submitBtn.disabled = true;
