@@ -14,7 +14,7 @@ function readVisitorsData() {
   } catch (error) {
     console.error('Error reading visitors data:', error);
   }
-  return { count: 0, ips: [] };
+  return { count: 0, emailViews: 0, lastReset: new Date().toISOString() };
 }
 
 // Function to write visitor data
@@ -26,6 +26,17 @@ function writeVisitorsData(data) {
     console.error('Error writing visitors data:', error);
     return false;
   }
+}
+
+// Function to check if we should reset daily count
+function shouldResetDaily(lastReset) {
+  const lastResetDate = new Date(lastReset);
+  const currentDate = new Date();
+  
+  // Reset if it's a new day
+  return lastResetDate.getDate() !== currentDate.getDate() ||
+         lastResetDate.getMonth() !== currentDate.getMonth() ||
+         lastResetDate.getFullYear() !== currentDate.getFullYear();
 }
 
 exports.handler = async function (event) {
@@ -47,11 +58,14 @@ exports.handler = async function (event) {
   }
 
   try {
-    // Get visitor IP
+    // Get visitor IP and user agent for better tracking
     const ip = event.headers["x-forwarded-for"] || 
                event.headers["client-ip"] || 
                event.headers["x-real-ip"] || 
                "unknown";
+    
+    const userAgent = event.headers["user-agent"] || "unknown";
+    const referer = event.headers["referer"] || "direct";
     
     // Clean IP (take first one if multiple)
     const cleanIP = ip.split(',')[0].trim();
@@ -59,20 +73,35 @@ exports.handler = async function (event) {
     // Read existing data
     const visitorsData = readVisitorsData();
     
-    // Check if this IP is new
-    if (!visitorsData.ips.includes(cleanIP)) {
-      visitorsData.ips.push(cleanIP);
-      visitorsData.count = visitorsData.ips.length;
-      
-      // Write updated data
-      writeVisitorsData(visitorsData);
+    // Check if we should reset daily count
+    if (shouldResetDaily(visitorsData.lastReset)) {
+      visitorsData.count = 0; // Reset daily count
+      visitorsData.lastReset = new Date().toISOString();
     }
+    
+    // Always increment email views (every time someone visits)
+    visitorsData.emailViews++;
+    
+    // Check if this is a new unique visitor for today
+    const visitorKey = `${cleanIP}-${userAgent}`;
+    if (!visitorsData.ips) {
+      visitorsData.ips = [];
+    }
+    
+    if (!visitorsData.ips.includes(visitorKey)) {
+      visitorsData.ips.push(visitorKey);
+      visitorsData.count++; // Increment unique visitors for today
+    }
+    
+    // Write updated data
+    writeVisitorsData(visitorsData);
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({ 
-        count: visitorsData.count,
+        count: visitorsData.count, // Daily unique visitors
+        emailViews: visitorsData.emailViews, // Total email views
         success: true 
       })
     };

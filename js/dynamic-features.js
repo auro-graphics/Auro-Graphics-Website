@@ -222,22 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   new DynamicFeatures();
 });
 
-// Helper: Animate numbers from 0 to target
-function animateCount(element, target, duration = 1200) {
-  let start = 0;
-  let startTime = null;
-  function animateStep(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const progress = Math.min((timestamp - startTime) / duration, 1);
-    element.textContent = Math.floor(progress * (target - start) + start);
-    if (progress < 1) {
-      requestAnimationFrame(animateStep);
-    } else {
-      element.textContent = target;
-    }
-  }
-  requestAnimationFrame(animateStep);
-}
+
 
 // Helper: Animate progress bar
 function animateProgressBar(bar, percent, duration = 1200) {
@@ -255,8 +240,7 @@ function animateCount(element, target, duration = 1200) {
   function animateStep(timestamp) {
     if (!startTime) startTime = timestamp;
     const progress = Math.min((timestamp - startTime) / duration, 1);
-    const current = Math.floor(progress * (target - start) + start);
-    element.textContent = '+' + current;
+    element.textContent = '+' + (Math.floor(progress * (target - start) + start));
     if (progress < 1) {
       requestAnimationFrame(animateStep);
     } else {
@@ -265,7 +249,6 @@ function animateCount(element, target, duration = 1200) {
   }
   requestAnimationFrame(animateStep);
 }
-
 
 // Intersection Observer to trigger animation on scroll
 function setupStatsCardAnimation() {
@@ -284,20 +267,32 @@ function setupStatsCardAnimation() {
 
 // Main function to load and animate counts
 async function loadAndAnimateStats() {
-  let today = 0, total = 0;
+  let today = 0, total = 0, emailViews = 0;
   try {
     const res = await fetch('/.netlify/functions/counter');
     const data = await res.json();
-    today = data.count || 0;
-    total = data.count || 0;
+    
+    if (data.success) {
+      today = data.count || 0; // Daily unique visitors
+      total = data.count || 0; // For now, same as today
+      emailViews = data.emailViews || 0; // Total email views
+    }
   } catch {
-    today = 0; total = 0;
+    today = 0; total = 0; emailViews = 0;
   }
-  const clients = 120; // Static, update as needed
+  const clients = 120; // Static for demo
 
+  // Animate numbers
   animateCount(document.getElementById('statTodayCount'), today);
   animateCount(document.getElementById('statTotalCount'), total);
   animateCount(document.getElementById('statClientsCount'), clients);
+  
+  // Optional: Add email views to a new element
+  const emailViewsElement = document.getElementById('statEmailViews');
+  if (emailViewsElement) {
+    animateCount(emailViewsElement, emailViews);
+  }
 }
 
-document.addEventListener('DOMContentLoaded', setupStatsCardAnimation); 
+// On DOM ready, setup observer
+document.addEventListener('DOMContentLoaded', setupStatsCardAnimation);
