@@ -15,24 +15,28 @@ class DynamicFeatures {
 
   // Visitor Counter
   async initVisitorCounter() {
-    const counterElement = document.getElementById('visitorCount');
-    if (!counterElement) return;
+    const card = document.getElementById('visitorCountCard');
+    const countSpan = document.getElementById('visitorTodayCount');
+    const progressBar = document.getElementById('visitorProgressBar');
+    if (!card || !countSpan || !progressBar) return;
 
     try {
       const response = await fetch('/.netlify/functions/counter');
       const data = await response.json();
 
-      if (data.success && data.count !== undefined) {
-        counterElement.textContent = `Visitors: ${data.count}`;
-        counterElement.style.opacity = '1';
-      } else {
-        counterElement.textContent = 'Visitors: (No data)';
-        counterElement.style.opacity = '0.7';
-      }
+      // For demo, let's say 500 is the "goal" for today
+      const todayCount = data.count || 0;
+      const goal = 500;
+      countSpan.textContent = todayCount;
+
+      // Animate progress bar
+      let percent = Math.min(100, (todayCount / goal) * 100);
+      progressBar.style.width = percent + '%';
+      progressBar.setAttribute('aria-valuenow', todayCount);
+      progressBar.setAttribute('aria-valuemax', goal);
     } catch (error) {
-      console.error('Counter error:', error);
-      counterElement.textContent = 'Visitors: Error';
-      counterElement.style.opacity = '0.5';
+      countSpan.textContent = 'Error';
+      progressBar.style.width = '0';
     }
   }
 
@@ -219,4 +223,82 @@ class DynamicFeatures {
 // Initialize dynamic features when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   new DynamicFeatures();
-}); 
+});
+
+// Helper: Animate numbers from 0 to target
+function animateCount(element, target, duration = 1200) {
+  let start = 0;
+  let startTime = null;
+  function animateStep(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    element.textContent = Math.floor(progress * (target - start) + start);
+    if (progress < 1) {
+      requestAnimationFrame(animateStep);
+    } else {
+      element.textContent = target;
+    }
+  }
+  requestAnimationFrame(animateStep);
+}
+
+// Helper: Animate progress bar
+function animateProgressBar(bar, percent, duration = 1200) {
+  bar.style.width = '0';
+  setTimeout(() => {
+    bar.style.transition = `width ${duration}ms cubic-bezier(.4,2,.3,1)`;
+    bar.style.width = percent + '%';
+  }, 100); // slight delay for effect
+}
+
+// Helper: Animate numbers from 0 to target
+function animateCount(element, target, duration = 1200) {
+  let start = 0;
+  let startTime = null;
+  function animateStep(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    element.textContent = Math.floor(progress * (target - start) + start);
+    if (progress < 1) {
+      requestAnimationFrame(animateStep);
+    } else {
+      element.textContent = target;
+    }
+  }
+  requestAnimationFrame(animateStep);
+}
+
+// Intersection Observer to trigger animation on scroll
+function setupStatsCardAnimation() {
+  const section = document.getElementById('stats-section');
+  if (!section) return;
+  let animated = false;
+  const observer = new window.IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !animated) {
+      animated = true;
+      loadAndAnimateStats();
+      observer.disconnect();
+    }
+  }, { threshold: 0.3 });
+  observer.observe(section);
+}
+
+// Main function to load and animate counts
+async function loadAndAnimateStats() {
+  let today = 0, total = 0;
+  try {
+    const res = await fetch('/.netlify/functions/counter');
+    const data = await res.json();
+    today = data.count || 0;
+    total = data.count || 0;
+  } catch {
+    today = 0; total = 0;
+  }
+  const clients = 120; // Static, update as needed
+
+  animateCount(document.getElementById('statTodayCount'), today);
+  animateCount(document.getElementById('statTotalCount'), total);
+  animateCount(document.getElementById('statClientsCount'), clients);
+}
+
+document.addEventListener('DOMContentLoaded', setupStatsCardAnimation); 
