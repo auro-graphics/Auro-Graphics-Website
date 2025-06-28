@@ -254,11 +254,11 @@ function animateCount(element, target, duration = 1200) {
   function animateStep(timestamp) {
     if (!startTime) startTime = timestamp;
     const progress = Math.min((timestamp - startTime) / duration, 1);
-    element.textContent = '+' + (Math.floor(progress * (target - start) + start));
+    element.textContent = Math.floor(progress * (target - start) + start);
     if (progress < 1) {
       requestAnimationFrame(animateStep);
     } else {
-      element.textContent = '+' + target;
+      element.textContent = target;
     }
   }
   requestAnimationFrame(animateStep);
@@ -281,26 +281,28 @@ function setupStatsCardAnimation() {
 
 // Main function to load and animate counts
 async function loadAndAnimateStats() {
-  let today = 0, total = 0;
+  let totalVisitors = 0, todayVisitors = 0;
   try {
     const res = await fetch('/.netlify/functions/counter');
     const data = await res.json();
-
+    
     if (data.success) {
-      today = data.todayCount || 0;
-      total = data.count || 0;
+      totalVisitors = data.count || 0; // Total visitors
+      todayVisitors = data.todayCount || 0; // Today's visitors
     }
-  } catch {
-    today = 0; total = 0;
+  } catch (error) {
+    console.error('Error loading stats:', error);
+    totalVisitors = 0; 
+    todayVisitors = 0;
   }
+  
+  const clients = 120; // Static happy clients count
 
-  const clients = 120; // Static for demo
-
-  animateCount(document.getElementById('statTodayCount'), today);
-  animateCount(document.getElementById('statTotalCount'), total);
+  // Animate numbers
+  animateCount(document.getElementById('statTotalCount'), totalVisitors);
+  animateCount(document.getElementById('statTodayCount'), todayVisitors);
   animateCount(document.getElementById('statClientsCount'), clients);
 }
-
 
 // On DOM ready, setup observer
 document.addEventListener('DOMContentLoaded', setupStatsCardAnimation);

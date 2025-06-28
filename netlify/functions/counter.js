@@ -1,79 +1,101 @@
 const fs = require('fs');
 const path = require('path');
 
-// Path to visitors data file
+// Path to the visitors data file
 const visitorsFile = path.join(__dirname, 'visitors.json');
 
-// Read JSON data
+// Function to read visitor data
 function readVisitorsData() {
   try {
     if (fs.existsSync(visitorsFile)) {
-      return JSON.parse(fs.readFileSync(visitorsFile, 'utf-8'));
+      const data = fs.readFileSync(visitorsFile, 'utf8');
+      return JSON.parse(data);
     }
-  } catch (err) {
-    console.error('Read error:', err);
+  } catch (error) {
+    console.error('Error reading visitors data:', error);
   }
-  return {
-    count: 0,
-    todayCount: 0,
-    lastReset: new Date().toISOString()
+  return { 
+    count: 0, 
+    todayCount: 0, 
+    lastReset: new Date().toISOString() 
   };
 }
 
-// Write JSON data
+// Function to write visitor data
 function writeVisitorsData(data) {
   try {
     fs.writeFileSync(visitorsFile, JSON.stringify(data, null, 2));
-  } catch (err) {
-    console.error('Write error:', err);
+    return true;
+  } catch (error) {
+    console.error('Error writing visitors data:', error);
+    return false;
   }
 }
 
-// Check if date needs reset
+// Function to check if we should reset daily count
 function shouldResetDaily(lastReset) {
-  const last = new Date(lastReset);
-  const now = new Date();
-  return (
-    last.getFullYear() !== now.getFullYear() ||
-    last.getMonth() !== now.getMonth() ||
-    last.getDate() !== now.getDate()
-  );
+  const lastResetDate = new Date(lastReset);
+  const currentDate = new Date();
+  
+  // Reset if it's a new day (different date)
+  return lastResetDate.getDate() !== currentDate.getDate() ||
+         lastResetDate.getMonth() !== currentDate.getMonth() ||
+         lastResetDate.getFullYear() !== currentDate.getFullYear();
 }
 
-exports.handler = async function () {
+exports.handler = async function (event) {
+  // Handle CORS
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
   };
 
+  // Handle preflight requests
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+
   try {
-    let data = readVisitorsData();
-
-    if (shouldResetDaily(data.lastReset)) {
-      data.todayCount = 0;
-      data.lastReset = new Date().toISOString();
+    // Read existing data
+    const visitorsData = readVisitorsData();
+    
+    // Check if we should reset today's count (new day)
+    if (shouldResetDaily(visitorsData.lastReset)) {
+      visitorsData.todayCount = 0; // Reset today's count
+      visitorsData.lastReset = new Date().toISOString();
     }
-
-    data.count += 1;
-    data.todayCount += 1;
-
-    writeVisitorsData(data);
+    
+    // Increment both counters on every visit
+    visitorsData.count++; // Total visitors (never resets)
+    visitorsData.todayCount++; // Today's visitors (resets daily)
+    
+    // Write updated data
+    writeVisitorsData(visitorsData);
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({
-        count: data.count,
-        todayCount: data.todayCount,
-        success: true
+      body: JSON.stringify({ 
+        count: visitorsData.count, // Total visitors
+        todayCount: visitorsData.todayCount, // Today's visitors
+        success: true 
       })
     };
-  } catch (err) {
-    console.error('Error in counter:', err);
+  } catch (error) {
+    console.error('Counter function error:', error);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ success: false, error: 'Internal server error' })
+      body: JSON.stringify({ 
+        error: 'Internal server error',
+        success: false 
+      })
     };
   }
 };
