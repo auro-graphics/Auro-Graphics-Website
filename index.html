@@ -265,12 +265,12 @@
   <main>
     <!-- Home Section -->
     <section id="home" class="home-section">
-      
+
       <div class="blob-box">
         <div class="blob ball1"></div>
         <div class="blob ball2"></div>
       </div>
-      
+
       <img src="assets/bots/left Flying Cross Bot.png" alt="Flying Auro Bot Left" class="flying-bot flying-bot-left">
       <img src="assets/bots/right Flying Cross Bot.png" alt="Flying Auro Bot Right" class="flying-bot flying-bot-right">
       <div class="home-content">
@@ -786,7 +786,8 @@
     <section id="contact" class="contact-section">
       <h2>Get In Touch</h2>
       <div class="contact-container">
-        <form class="contact-form" action="https://formsubmit.co/ajax/auroadvertsadvertising@gmail.com" method="POST" id="contactForm">
+        <form class="contact-form" action="https://formsubmit.co/ajax/auroadvertsadvertising@gmail.com" method="POST"
+          id="contactForm">
           <!-- FormSubmit settings -->
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_subject" value="New message from AURO Graphics website">
@@ -794,16 +795,16 @@
           <input type="hidden" name="_next" value="https://aurographics.netlify.app/">
           <input type="hidden" name="_redirect" value="https://aurographics.netlify.app/?email={{uuid}}">
 
-          
+
           <!-- Form fields -->
           <input type="text" name="name" placeholder="Your Name" required>
-          <input type="email" name="email" placeholder="Your Email" required>
-          <input type="tel" name="phone" placeholder="Your Phone Number (optional)">
-          <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
-          
+          <input type="email" name="email" id="emailField" placeholder="Your Email" required>
+          <input type="tel" name="phone" pattern="[0-9]{10}" placeholder="Your Phone Number (optional)">
+          <textarea name="message" rows="6" id="phoneField" placeholder="Your Message" required></textarea>
+
           <!-- Submit button -->
           <button type="submit" class="btn">Send Message</button>
-      </form>
+        </form>
 
 
 
