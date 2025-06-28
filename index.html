@@ -467,11 +467,15 @@
   fetch("/.netlify/functions/counter")
   .then(response => response.json())
   .then(data => {
-    document.getElementById("visitorCount").textContent = "Visitors: " + data.count;
+    if (data.count !== undefined) {
+      document.getElementById("visitorCount").textContent = "Visitors: " + data.count;
+    } else {
+      document.getElementById("visitorCount").textContent = "Visitors: (No data)";
+    }
   })
   .catch(error => {
     document.getElementById("visitorCount").textContent = "Visitors: Error";
-    console.error(error);
+    console.error("Counter error:", error);
   });
 </script>
 
