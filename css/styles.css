@@ -2564,7 +2564,7 @@ select:disabled, option:disabled {
     color: var(--off-white);
   }
   .section-title {
-    font-size: 2rem;
+    /* font-size: 2rem; */
     color: var(--accent-pink);
     margin-bottom: 30px;
   }
