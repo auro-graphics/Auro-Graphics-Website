@@ -1,0 +1,26 @@
+{
+  "name": "auro-graphics-website",
+  "version": "1.0.0",
+  "description": "Auro Graphics Website with dynamic features",
+  "main": "index.html",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static site - no build required'",
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "keywords": [
+    "graphics",
+    "design",
+    "portfolio",
+    "netlify",
+    "static-site"
+  ],
+  "author": "Auro Graphics",
+  "license": "MIT"
+} 

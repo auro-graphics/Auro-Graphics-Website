@@ -451,6 +451,7 @@
         </footer>
 
     <script src="js/script.js"></script>
+    <script src="js/dynamic-features.js"></script>
     <script>
   window.addEventListener('scroll', () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -464,19 +465,6 @@
     if (progressBot) progressBot.style.left = scrollPercent + '%';
   });
 
-  fetch("/.netlify/functions/counter")
-  .then(response => response.json())
-  .then(data => {
-    if (data.count !== undefined) {
-      document.getElementById("visitorCount").textContent = "Visitors: " + data.count;
-    } else {
-      document.getElementById("visitorCount").textContent = "Visitors: (No data)";
-    }
-  })
-  .catch(error => {
-    document.getElementById("visitorCount").textContent = "Visitors: Error";
-    console.error("Counter error:", error);
-  });
 </script>
 
 
