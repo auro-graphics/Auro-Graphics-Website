@@ -443,7 +443,8 @@
         </section>
     </main>
 
-    <p> update </p>
+    <div id="visitorCount">Visitors: Loading...</div>
+
         <!-- Footer -->
         <footer class="footer">
             <p>&copy; 2025 AURO Graphics. All Rights Reserved.</p>
@@ -461,6 +462,16 @@
 
     if (progressBar) progressBar.style.width = scrollPercent + '%';
     if (progressBot) progressBot.style.left = scrollPercent + '%';
+  });
+
+  fetch("/.netlify/functions/counter")
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById("visitorCount").textContent = "Visitors: " + data.count;
+  })
+  .catch(error => {
+    document.getElementById("visitorCount").textContent = "Visitors: Error";
+    console.error(error);
   });
 </script>
 
