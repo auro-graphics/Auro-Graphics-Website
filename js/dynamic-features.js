@@ -15,8 +15,8 @@ class DynamicFeatures {
 
   // Visitor Counter
   async initVisitorCounter() {
-    const countSpan = document.getElementById('statTotalCount');
-    const todaySpan = document.getElementById('statTodayCount');
+    const countSpan = document.getElementById('totalVisitors');
+    const todaySpan = document.getElementById('todayVisitors');
     if (!countSpan || !todaySpan) return;
 
     try {
@@ -299,8 +299,8 @@ async function loadAndAnimateStats() {
   const clients = 120; // Static happy clients count
 
   // Animate numbers
-  animateCount(document.getElementById('statTotalCount'), totalVisitors);
-  animateCount(document.getElementById('statTodayCount'), todayVisitors);
+  animateCount(document.getElementById('totalVisitors'), totalVisitors);
+  animateCount(document.getElementById('todayVisitors'), todayVisitors);
   animateCount(document.getElementById('statClientsCount'), clients);
 }
 

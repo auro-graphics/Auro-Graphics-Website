@@ -15,8 +15,8 @@ function readVisitorsData() {
     console.error('Error reading visitors data:', error);
   }
   return { 
-    count: 0, 
-    todayCount: 0, 
+    totalVisitors: 0, 
+    todayVisitors: 0, 
     lastReset: new Date().toISOString() 
   };
 }
@@ -37,7 +37,7 @@ function shouldResetDaily(lastReset) {
   const lastResetDate = new Date(lastReset);
   const currentDate = new Date();
   
-  // Reset if it's a new day (different date)
+  // Reset if it's a new day
   return lastResetDate.getDate() !== currentDate.getDate() ||
          lastResetDate.getMonth() !== currentDate.getMonth() ||
          lastResetDate.getFullYear() !== currentDate.getFullYear();
@@ -67,13 +67,13 @@ exports.handler = async function (event) {
     
     // Check if we should reset today's count (new day)
     if (shouldResetDaily(visitorsData.lastReset)) {
-      visitorsData.todayCount = 0; // Reset today's count
+      visitorsData.todayVisitors = 0; // Reset today's count
       visitorsData.lastReset = new Date().toISOString();
     }
     
     // Increment both counters on every visit
-    visitorsData.count++; // Total visitors (never resets)
-    visitorsData.todayCount++; // Today's visitors (resets daily)
+    visitorsData.totalVisitors++; // Total visitors (never resets)
+    visitorsData.todayVisitors++; // Today's visitors (resets daily)
     
     // Write updated data
     writeVisitorsData(visitorsData);
@@ -82,8 +82,8 @@ exports.handler = async function (event) {
       statusCode: 200,
       headers,
       body: JSON.stringify({ 
-        count: visitorsData.count, // Total visitors
-        todayCount: visitorsData.todayCount, // Today's visitors
+        totalVisitors: visitorsData.totalVisitors,
+        todayVisitors: visitorsData.todayVisitors,
         success: true 
       })
     };
