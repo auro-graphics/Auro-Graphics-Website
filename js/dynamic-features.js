@@ -1,298 +1,296 @@
-// Dynamic Features for Auro Graphics Website
-// Handles visitor counter, contact form, and portfolio data
+  // Dynamic Features for Auro Graphics Website
+  // Handles visitor counter, contact form, and portfolio data
 
-class DynamicFeatures {
-  constructor() {
-    this.init();
-  }
-
-  init() {
-    this.initVisitorCounter();
-    this.initContactForm();
-    this.initPortfolioLoader();
-    this.initScrollProgress();
-  }
-
-  // Visitor Counter
-  async initVisitorCounter() {
-    const card = document.getElementById('visitorCountCard');
-    const countSpan = document.getElementById('visitorTodayCount');
-    const progressBar = document.getElementById('visitorProgressBar');
-    if (!card || !countSpan || !progressBar) return;
-
-    try {
-      const response = await fetch('/.netlify/functions/counter');
-      const data = await response.json();
-
-      // For demo, let's say 500 is the "goal" for today
-      const todayCount = data.count || 0;
-      const goal = 500;
-      countSpan.textContent = todayCount;
-
-      // Animate progress bar
-      let percent = Math.min(100, (todayCount / goal) * 100);
-      progressBar.style.width = percent + '%';
-      progressBar.setAttribute('aria-valuenow', todayCount);
-      progressBar.setAttribute('aria-valuemax', goal);
-    } catch (error) {
-      countSpan.textContent = 'Error';
-      progressBar.style.width = '0';
+  class DynamicFeatures {
+    constructor() {
+      this.init();
     }
-  }
 
-  // Contact Form Handler
-  initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    if (!contactForm) return;
+    init() {
+      this.initVisitorCounter();
+      this.initContactForm();
+      this.initPortfolioLoader();
+      this.initScrollProgress();
+    }
 
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const submitBtn = contactForm.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        
-        // Show loading state
-        submitBtn.textContent = 'Sending...';
-        submitBtn.disabled = true;
-
-        try {
-            // Get form data
-            const formData = new FormData(contactForm);
-            
-            // Show sending notification
-            this.showNotification('Sending your message...', 'info');
-            
-            // Submit to FormSubmit
-            const response = await fetch(contactForm.action, {
-                method: 'POST',
-                body: formData
-            });
-
-            // Check if FormSubmit redirected (success) or returned error
-            if (response.redirected || response.ok) {
-                this.showNotification('Thank you! Your message has been sent successfully.', 'success');
-                contactForm.reset();
-                
-                // Stay on page instead of redirecting
-                setTimeout(() => {
-                    this.showNotification('We will get back to you soon!', 'success');
-                }, 1000);
-            } else {
-                throw new Error('Failed to send message');
-            }
-        } catch (error) {
-            console.error('Contact form error:', error);
-            this.showNotification('Network error. Please check your connection and try again.', 'error');
-        } finally {
-            // Reset button state
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        }
-    });
-}
-  
-
-  // Portfolio Data Loader
-  async initPortfolioLoader() {
-    // This can be used to load portfolio data dynamically
-    // For now, we'll keep the existing static loading
-    // but you can uncomment this to use the API endpoint
+    // Visitor Counter
+    async initVisitorCounter() {
+      const countSpan = document.getElementById('statTotalCount');
+      const todaySpan = document.getElementById('statTodayCount');
+      if (!countSpan || !todaySpan) return;
     
-    /*
-    try {
-      const response = await fetch('/.netlify/functions/portfolio');
-      const data = await response.json();
-      
-      if (data.success) {
-        // Update portfolio with dynamic data
-        this.updatePortfolio(data.data);
+      try {
+        const res = await fetch('/.netlify/functions/counter');
+        const data = await res.json();
+    
+        if (data.success) {
+          animateCount(countSpan, data.count);
+          animateCount(todaySpan, data.todayCount);
+    
+          // Optional: animate progress bar
+          const bar = document.getElementById('visitorProgressBar');
+          if (bar) animateProgressBar(bar, Math.min((data.todayCount / 500) * 100, 100));
+        }
+      } catch (err) {
+        console.error('Visitor count error:', err);
+        countSpan.textContent = '--';
+        todaySpan.textContent = '--';
       }
-    } catch (error) {
-      console.error('Portfolio loading error:', error);
     }
-    */
+    
+    // Contact Form Handler
+    initContactForm() {
+      const contactForm = document.getElementById('contactForm');
+      if (!contactForm) return;
+
+      contactForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const submitBtn = contactForm.querySelector('button[type="submit"]');
+          const originalText = submitBtn.textContent;
+          
+          // Show loading state
+          submitBtn.textContent = 'Sending...';
+          submitBtn.disabled = true;
+
+          try {
+              // Get form data
+              const formData = new FormData(contactForm);
+              
+              // Show sending notification
+              this.showNotification('Sending your message...', 'info');
+              
+              // Submit to FormSubmit
+              const response = await fetch(contactForm.action, {
+                  method: 'POST',
+                  body: formData
+              });
+
+              // Check if FormSubmit redirected (success) or returned error
+              if (response.redirected || response.ok) {
+                  this.showNotification('Thank you! Your message has been sent successfully.', 'success');
+                  contactForm.reset();
+                  
+                  // Stay on page instead of redirecting
+                  setTimeout(() => {
+                      this.showNotification('We will get back to you soon!', 'success');
+                  }, 1000);
+              } else {
+                  throw new Error('Failed to send message');
+              }
+          } catch (error) {
+              console.error('Contact form error:', error);
+              this.showNotification('Network error. Please check your connection and try again.', 'error');
+          } finally {
+              // Reset button state
+              submitBtn.textContent = originalText;
+              submitBtn.disabled = false;
+          }
+      });
   }
+    
 
-  // Scroll Progress Bar
-  initScrollProgress() {
-    window.addEventListener('scroll', () => {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrollPercent = (scrollTop / scrollHeight) * 100;
+    // Portfolio Data Loader
+    async initPortfolioLoader() {
+      // This can be used to load portfolio data dynamically
+      // For now, we'll keep the existing static loading
+      // but you can uncomment this to use the API endpoint
+      
+      /*
+      try {
+        const response = await fetch('/.netlify/functions/portfolio');
+        const data = await response.json();
+        
+        if (data.success) {
+          // Update portfolio with dynamic data
+          this.updatePortfolio(data.data);
+        }
+      } catch (error) {
+        console.error('Portfolio loading error:', error);
+      }
+      */
+    }
 
-      const progressBar = document.querySelector('.home-progress-bar-fill');
-      const progressBot = document.querySelector('.progress-bot');
+    // Scroll Progress Bar
+    initScrollProgress() {
+      window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = (scrollTop / scrollHeight) * 100;
 
-      if (progressBar) progressBar.style.width = scrollPercent + '%';
-      if (progressBot) progressBot.style.left = scrollPercent + '%';
-    });
-  }
+        const progressBar = document.querySelector('.home-progress-bar-fill');
+        const progressBot = document.querySelector('.progress-bot');
 
-  // Notification System
-  showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
+        if (progressBar) progressBar.style.width = scrollPercent + '%';
+        if (progressBot) progressBot.style.left = scrollPercent + '%';
+      });
+    }
 
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-      <div class="notification-content">
-        <span class="notification-message">${message}</span>
-        <button class="notification-close">&times;</button>
-      </div>
-    `;
+    // Notification System
+    showNotification(message, type = 'info') {
+      // Remove existing notifications
+      const existingNotifications = document.querySelectorAll('.notification');
+      existingNotifications.forEach(notification => notification.remove());
 
-    // Add styles
-    notification.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
-      color: white;
-      padding: 15px 20px;
-      border-radius: 5px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      z-index: 10000;
-      max-width: 400px;
-      animation: slideIn 0.3s ease-out;
-    `;
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.innerHTML = `
+        <div class="notification-content">
+          <span class="notification-message">${message}</span>
+          <button class="notification-close">&times;</button>
+        </div>
+      `;
 
-    // Add close functionality
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-      notification.style.animation = 'slideOut 0.3s ease-in';
-      setTimeout(() => notification.remove(), 300);
-    });
+      // Add styles
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 10000;
+        max-width: 400px;
+        animation: slideIn 0.3s ease-out;
+      `;
 
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      if (notification.parentNode) {
+      // Add close functionality
+      const closeBtn = notification.querySelector('.notification-close');
+      closeBtn.addEventListener('click', () => {
         notification.style.animation = 'slideOut 0.3s ease-in';
         setTimeout(() => notification.remove(), 300);
+      });
+
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.style.animation = 'slideOut 0.3s ease-in';
+          setTimeout(() => notification.remove(), 300);
+        }
+      }, 5000);
+
+      // Add to page
+      document.body.appendChild(notification);
+
+      // Add CSS animations if not already present
+      if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+          @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+          }
+          .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+            float: right;
+          }
+          .notification-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+        `;
+        document.head.appendChild(style);
       }
-    }, 5000);
+    }
 
-    // Add to page
-    document.body.appendChild(notification);
-
-    // Add CSS animations if not already present
-    if (!document.querySelector('#notification-styles')) {
-      const style = document.createElement('style');
-      style.id = 'notification-styles';
-      style.textContent = `
-        @keyframes slideIn {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(100%); opacity: 0; }
-        }
-        .notification-close {
-          background: none;
-          border: none;
-          color: white;
-          font-size: 18px;
-          cursor: pointer;
-          margin-left: 10px;
-          float: right;
-        }
-        .notification-content {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-      `;
-      document.head.appendChild(style);
+    // Update Portfolio (for dynamic loading)
+    updatePortfolio(data) {
+      // This method can be used to dynamically update portfolio
+      // when using the API endpoint
+      console.log('Portfolio data loaded:', data);
     }
   }
 
-  // Update Portfolio (for dynamic loading)
-  updatePortfolio(data) {
-    // This method can be used to dynamically update portfolio
-    // when using the API endpoint
-    console.log('Portfolio data loaded:', data);
+  // Initialize dynamic features when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new DynamicFeatures();
+  });
+
+
+
+  // Helper: Animate progress bar
+  function animateProgressBar(bar, percent, duration = 1200) {
+    bar.style.width = '0';
+    setTimeout(() => {
+      bar.style.transition = `width ${duration}ms cubic-bezier(.4,2,.3,1)`;
+      bar.style.width = percent + '%';
+    }, 100); // slight delay for effect
   }
-}
 
-// Initialize dynamic features when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  new DynamicFeatures();
-});
-
-
-
-// Helper: Animate progress bar
-function animateProgressBar(bar, percent, duration = 1200) {
-  bar.style.width = '0';
-  setTimeout(() => {
-    bar.style.transition = `width ${duration}ms cubic-bezier(.4,2,.3,1)`;
-    bar.style.width = percent + '%';
-  }, 100); // slight delay for effect
-}
-
-// Helper: Animate numbers from 0 to target
-function animateCount(element, target, duration = 1200) {
-  let start = 0;
-  let startTime = null;
-  function animateStep(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const progress = Math.min((timestamp - startTime) / duration, 1);
-    element.textContent = '+' + (Math.floor(progress * (target - start) + start));
-    if (progress < 1) {
-      requestAnimationFrame(animateStep);
-    } else {
-      element.textContent = '+' + target;
+  // Helper: Animate numbers from 0 to target
+  function animateCount(element, target, duration = 1200) {
+    let start = 0;
+    let startTime = null;
+    function animateStep(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      element.textContent = '+' + (Math.floor(progress * (target - start) + start));
+      if (progress < 1) {
+        requestAnimationFrame(animateStep);
+      } else {
+        element.textContent = '+' + target;
+      }
     }
+    requestAnimationFrame(animateStep);
   }
-  requestAnimationFrame(animateStep);
-}
 
-// Intersection Observer to trigger animation on scroll
-function setupStatsCardAnimation() {
-  const section = document.getElementById('stats-section');
-  if (!section) return;
-  let animated = false;
-  const observer = new window.IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !animated) {
-      animated = true;
-      loadAndAnimateStats();
-      observer.disconnect();
+  // Intersection Observer to trigger animation on scroll
+  function setupStatsCardAnimation() {
+    const section = document.getElementById('stats-section');
+    if (!section) return;
+    let animated = false;
+    const observer = new window.IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !animated) {
+        animated = true;
+        loadAndAnimateStats();
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(section);
+  }
+
+  // Main function to load and animate counts
+  async function loadAndAnimateStats() {
+    let today = 0, total = 0, emailViews = 0;
+    try {
+      const res = await fetch('/.netlify/functions/counter');
+      const data = await res.json();
+      
+      if (data.success) {
+        today = data.count || 0; // Daily unique visitors
+        total = data.count || 0; // For now, same as today
+        emailViews = data.emailViews || 0; // Total email views
+      }
+    } catch {
+      today = 0; total = 0; emailViews = 0;
     }
-  }, { threshold: 0.3 });
-  observer.observe(section);
-}
+    const clients = 120; // Static for demo
 
-// Main function to load and animate counts
-async function loadAndAnimateStats() {
-  let today = 0, total = 0, emailViews = 0;
-  try {
-    const res = await fetch('/.netlify/functions/counter');
-    const data = await res.json();
+    // Animate numbers
+    animateCount(document.getElementById('statTodayCount'), today);
+    animateCount(document.getElementById('statTotalCount'), total);
+    animateCount(document.getElementById('statClientsCount'), clients);
     
-    if (data.success) {
-      today = data.count || 0; // Daily unique visitors
-      total = data.count || 0; // For now, same as today
-      emailViews = data.emailViews || 0; // Total email views
+    // Optional: Add email views to a new element
+    const emailViewsElement = document.getElementById('statEmailViews');
+    if (emailViewsElement) {
+      animateCount(emailViewsElement, emailViews);
     }
-  } catch {
-    today = 0; total = 0; emailViews = 0;
   }
-  const clients = 120; // Static for demo
 
-  // Animate numbers
-  animateCount(document.getElementById('statTodayCount'), today);
-  animateCount(document.getElementById('statTotalCount'), total);
-  animateCount(document.getElementById('statClientsCount'), clients);
-  
-  // Optional: Add email views to a new element
-  const emailViewsElement = document.getElementById('statEmailViews');
-  if (emailViewsElement) {
-    animateCount(emailViewsElement, emailViews);
-  }
-}
-
-// On DOM ready, setup observer
-document.addEventListener('DOMContentLoaded', setupStatsCardAnimation);
+  // On DOM ready, setup observer
+  document.addEventListener('DOMContentLoaded', setupStatsCardAnimation);

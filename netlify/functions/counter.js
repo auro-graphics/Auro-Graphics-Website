@@ -1,119 +1,79 @@
 const fs = require('fs');
 const path = require('path');
 
-// Path to the visitors data file
+// Path to visitors data file
 const visitorsFile = path.join(__dirname, 'visitors.json');
 
-// Function to read visitor data
+// Read JSON data
 function readVisitorsData() {
   try {
     if (fs.existsSync(visitorsFile)) {
-      const data = fs.readFileSync(visitorsFile, 'utf8');
-      return JSON.parse(data);
+      return JSON.parse(fs.readFileSync(visitorsFile, 'utf-8'));
     }
-  } catch (error) {
-    console.error('Error reading visitors data:', error);
+  } catch (err) {
+    console.error('Read error:', err);
   }
-  return { count: 0, emailViews: 0, lastReset: new Date().toISOString() };
+  return {
+    count: 0,
+    todayCount: 0,
+    lastReset: new Date().toISOString()
+  };
 }
 
-// Function to write visitor data
+// Write JSON data
 function writeVisitorsData(data) {
   try {
     fs.writeFileSync(visitorsFile, JSON.stringify(data, null, 2));
-    return true;
-  } catch (error) {
-    console.error('Error writing visitors data:', error);
-    return false;
+  } catch (err) {
+    console.error('Write error:', err);
   }
 }
 
-// Function to check if we should reset daily count
+// Check if date needs reset
 function shouldResetDaily(lastReset) {
-  const lastResetDate = new Date(lastReset);
-  const currentDate = new Date();
-  
-  // Reset if it's a new day
-  return lastResetDate.getDate() !== currentDate.getDate() ||
-         lastResetDate.getMonth() !== currentDate.getMonth() ||
-         lastResetDate.getFullYear() !== currentDate.getFullYear();
+  const last = new Date(lastReset);
+  const now = new Date();
+  return (
+    last.getFullYear() !== now.getFullYear() ||
+    last.getMonth() !== now.getMonth() ||
+    last.getDate() !== now.getDate()
+  );
 }
 
-exports.handler = async function (event) {
-  // Handle CORS
+exports.handler = async function () {
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
   };
 
-  // Handle preflight requests
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: ''
-    };
-  }
-
   try {
-    // Get visitor IP and user agent for better tracking
-    const ip = event.headers["x-forwarded-for"] || 
-               event.headers["client-ip"] || 
-               event.headers["x-real-ip"] || 
-               "unknown";
-    
-    const userAgent = event.headers["user-agent"] || "unknown";
-    const referer = event.headers["referer"] || "direct";
-    
-    // Clean IP (take first one if multiple)
-    const cleanIP = ip.split(',')[0].trim();
+    let data = readVisitorsData();
 
-    // Read existing data
-    const visitorsData = readVisitorsData();
-    
-    // Check if we should reset daily count
-    if (shouldResetDaily(visitorsData.lastReset)) {
-      visitorsData.count = 0; // Reset daily count
-      visitorsData.lastReset = new Date().toISOString();
+    if (shouldResetDaily(data.lastReset)) {
+      data.todayCount = 0;
+      data.lastReset = new Date().toISOString();
     }
-    
-    // Always increment email views (every time someone visits)
-    visitorsData.emailViews++;
-    
-    // Check if this is a new unique visitor for today
-    const visitorKey = `${cleanIP}-${userAgent}`;
-    if (!visitorsData.ips) {
-      visitorsData.ips = [];
-    }
-    
-    if (!visitorsData.ips.includes(visitorKey)) {
-      visitorsData.ips.push(visitorKey);
-      visitorsData.count++; // Increment unique visitors for today
-    }
-    
-    // Write updated data
-    writeVisitorsData(visitorsData);
+
+    data.count += 1;
+    data.todayCount += 1;
+
+    writeVisitorsData(data);
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ 
-        count: visitorsData.count, // Daily unique visitors
-        emailViews: visitorsData.emailViews, // Total email views
-        success: true 
+      body: JSON.stringify({
+        count: data.count,
+        todayCount: data.todayCount,
+        success: true
       })
     };
-  } catch (error) {
-    console.error('Counter function error:', error);
+  } catch (err) {
+    console.error('Error in counter:', err);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
-        error: 'Internal server error',
-        success: false 
-      })
+      body: JSON.stringify({ success: false, error: 'Internal server error' })
     };
   }
 };
