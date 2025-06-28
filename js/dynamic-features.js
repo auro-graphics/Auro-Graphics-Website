@@ -14,29 +14,26 @@ class DynamicFeatures {
   }
 
   // Visitor Counter
-  async initVisitorCounter() {
-    const countSpan = document.getElementById('totalVisitors');
-    const todaySpan = document.getElementById('todayVisitors');
-    if (!countSpan || !todaySpan) return;
+ // Visitor Counter
+async initVisitorCounter() {
+  const countSpan = document.getElementById('totalVisitors');
+  const todaySpan = document.getElementById('todayVisitors');
+  if (!countSpan || !todaySpan) return;
 
-    try {
-      const res = await fetch('/.netlify/functions/counter');
-      const data = await res.json();
+  try {
+    const res = await fetch('/.netlify/functions/counter');
+    const data = await res.json();
 
-      if (data.success) {
-        animateCount(countSpan, data.count);
-        animateCount(todaySpan, data.todayCount);
-
-        // Optional: animate progress bar
-        const bar = document.getElementById('visitorProgressBar');
-        if (bar) animateProgressBar(bar, Math.min((data.todayCount / 500) * 100, 100));
-      }
-    } catch (err) {
-      console.error('Visitor count error:', err);
-      countSpan.textContent = '--';
-      todaySpan.textContent = '--';
+    if (data.success) {
+      animateCount(countSpan, data.totalVisitors);  // Changed from data.count
+      animateCount(todaySpan, data.todayVisitors);  // Changed from data.todayCount
     }
+  } catch (err) {
+    console.error('Visitor count error:', err);
+    countSpan.textContent = '--';
+    todaySpan.textContent = '--';
   }
+}
 
   // Contact Form Handler
   initContactForm() {
@@ -104,7 +101,6 @@ class DynamicFeatures {
       }
     });
   }
-
 
   // Portfolio Data Loader
   async initPortfolioLoader() {
@@ -236,8 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
   new DynamicFeatures();
 });
 
-
-
 // Helper: Animate progress bar
 function animateProgressBar(bar, percent, duration = 1200) {
   bar.style.width = '0';
@@ -287,8 +281,8 @@ async function loadAndAnimateStats() {
     const data = await res.json();
     
     if (data.success) {
-      totalVisitors = data.count || 0; // Total visitors
-      todayVisitors = data.todayCount || 0; // Today's visitors
+      totalVisitors = data.totalVisitors || 0; // Total visitors
+      todayVisitors = data.todayVisitors || 0; // Today's visitors
     }
   } catch (error) {
     console.error('Error loading stats:', error);
