@@ -44,50 +44,52 @@ class DynamicFeatures {
   initContactForm() {
     const contactForm = document.getElementById('contactForm');
     if (!contactForm) return;
-  
+
     contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-  
-      submitBtn.textContent = 'Sending...';
-      submitBtn.disabled = true;
-  
-      try {
-        const formData = new FormData(contactForm);
-  
-        // Show info message
-        this.showNotification('Sending your message...', 'info');
-  
-        // Send to FormSubmit via AJAX endpoint
-        const response = await fetch(contactForm.action, {
-          method: 'POST',
-          body: formData
-        });
-  
-        const result = await response.json();
-  
-        if (response.ok && result.success === 'true') {
-          this.showNotification('Thank you! Your message has been sent successfully.', 'success');
-          contactForm.reset();
-  
-          setTimeout(() => {
-            this.showNotification('We will get back to you soon!', 'success');
-          }, 1500);
-        } else {
-          throw new Error(result.message || 'Failed to send message.');
+        e.preventDefault();
+        
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        
+        // Show loading state
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        try {
+            // Get form data
+            const formData = new FormData(contactForm);
+            
+            // Show sending notification
+            this.showNotification('Sending your message...', 'info');
+            
+            // Submit to FormSubmit
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            // Check if FormSubmit redirected (success) or returned error
+            if (response.redirected || response.ok) {
+                this.showNotification('Thank you! Your message has been sent successfully.', 'success');
+                contactForm.reset();
+                
+                // Stay on page instead of redirecting
+                setTimeout(() => {
+                    this.showNotification('We will get back to you soon!', 'success');
+                }, 1000);
+            } else {
+                throw new Error('Failed to send message');
+            }
+        } catch (error) {
+            console.error('Contact form error:', error);
+            this.showNotification('Network error. Please check your connection and try again.', 'error');
+        } finally {
+            // Reset button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
-  
-      } catch (error) {
-        console.error('Contact form error:', error);
-        this.showNotification('Error: ' + error.message, 'error');
-      } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-      }
     });
-  }
+}
   
 
   // Portfolio Data Loader
