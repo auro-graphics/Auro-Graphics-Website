@@ -179,27 +179,32 @@
       }
     }
 #terms-note {
-  font-size: 16px;
+  font-size: 1rem; /* Base size for desktop (16px approx) */
   color: #fff;
   font-style: italic;
-  margin-top: 10px;
+  margin-top: 0.625rem; /* 10px */
   text-align: center;
-  padding: 10px;
+  padding: 0.625rem; /* 10px */
 }
-  @media screen and (max-width: 768px) {
-    #terms-note {
-      font-size: 8px; /* Slightly smaller on tablets */
-      padding: 8px;
-      text-align: justify;
-    }
+
+/* Tablet view */
+@media screen and (max-width: 768px) {
+  #terms-note {
+    font-size: 0.75rem; /* ~12px */
+    padding: 0.5rem; /* ~8px */
+    text-align: justify;
   }
-  @media screen and (max-width: 480px) {
-    #terms-note {
-      font-size: 5px; /* Mobile friendly */
-      line-height: 1.1;
-      text-align: justify;
-    }
+}
+
+/* Mobile view */
+@media screen and (max-width: 480px) {
+  #terms-note {
+    font-size: 0.625rem; /* ~10px */
+    line-height: 1.2;
+    text-align: justify;
   }
+}
+
 
     /* .visitor-card {
       max-width: 400px;
